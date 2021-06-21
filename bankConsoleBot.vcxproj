@@ -140,19 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bankConsoleBot.cpp" />
-    <ClCompile Include="BankDB.cpp" />
-    <ClCompile Include="BankUser.cpp" />
-    <ClCompile Include="BankUser1.cpp" />
-    <ClCompile Include="Date.cpp" />
-    <ClCompile Include="UserCart.cpp" />
-    <ClCompile Include="UserCredit.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BankDB.h" />
-    <ClInclude Include="BankUser.h" />
-    <ClInclude Include="Date.h" />
-    <ClInclude Include="UserCart.h" />
-    <ClInclude Include="UserCredit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

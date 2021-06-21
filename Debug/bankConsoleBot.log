@@ -1,11 +1,3 @@
-﻿  BankDB.cpp
-E:\bankConsoleBot\bankConsoleBot\UserCart.h(21,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  BankUser.cpp
-E:\bankConsoleBot\bankConsoleBot\UserCart.h(21,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  UserCart.cpp
-E:\bankConsoleBot\bankConsoleBot\UserCart.h(21,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  bankConsoleBot.cpp
-E:\bankConsoleBot\bankConsoleBot\UserCart.h(21,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-  Создание кода...
-E:\bankConsoleBot\bankConsoleBot\UserCart.h(45): warning C4715: UserCart::getPass: значение возвращается не при всех путях выполнения
+﻿  bankConsoleBot.cpp
+E:\bankConsoleBot\bankConsoleBot\bankConsoleBot.cpp(116,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   bankConsoleBot.vcxproj -> E:\bankConsoleBot\bankConsoleBot\Debug\bankConsoleBot.exe

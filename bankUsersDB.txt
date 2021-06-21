@@ -1,0 +1,5 @@
+
+id:0|name:Filatov|surname:Albert|patronymic:Vyacheslavovich|age:32|cartMoney:133|cartNumber:1463|cartPin:14
+id:1|name:Kalashnikov|surname:Ostap|patronymic:Maksimovich|age:26|cartMoney:0|cartNumber:4286|cartPin:27
+id:2|name:Blinova|surname:Birgit|patronymic:Mikhailovna|age:26|cartMoney:0|cartNumber:4789|cartPin:94
+id:3|name:asd|surname:asd|patronymic:asd|age:123|cartMoney:0|cartNumber:5014|cartPin:42
