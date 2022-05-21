@@ -96,11 +96,16 @@ void clearBD() {
 }
 
 void saveBD() {
+    string* lines = new string[20];
+
     for (int i = 0; i < 20; i++) {
         if (BD[i][1][1] != "") {
-            addUserInDB(i, BD[i][1][1], BD[i][2][1], BD[i][3][1], BD[i][4][1], BD[i][5][1], BD[i][6][1], BD[i][7][1]);
+            lines[i] = "id:" + to_string(i) + "|name:" + BD[i][1][1] + "|surname:" + BD[i][2][1] + "|patronymic:" + BD[i][3][1] + "|age:" + BD[i][4][1] + "|cartMoney:" + BD[i][5][1] + "|cartNumber:" + BD[i][6][1] + "|cartPin:" + BD[i][7][1] + "\n";
+
         }
     }
+
+    DataBase::AddUsers(lines);
 }
 
 void registerUser() {
