@@ -7,7 +7,7 @@ using namespace std;
 
 const string FilePath = "./bankUsersDB.txt";
 fstream FS;
-int UsersCount;
+int UsersCountDB;
 
 class DataBase
 {
@@ -49,14 +49,14 @@ public:
 		string line = "";
 		string* lines = new string[20];
 
-		UsersCount = 0;
+		UsersCountDB = 0;
 
 		FS.open(FilePath, fstream::app | fstream::in | fstream::out);
 		if (FS.is_open()) {
 			while (!FS.eof()) {
 				FS >> line;
 				if (line.length() != 0) {
-					FS >> lines[UsersCount];
+					FS >> lines[UsersCountDB];
 				}
 			}
 		}

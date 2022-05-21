@@ -6,49 +6,14 @@
 #include <fstream>
 #include "DataBase.h"
 #include "UI.h"
+#include "UsersList.h"
 
 using namespace std;
 
-int userLastId = 0;
-fstream fs;
-string BD[20][8][2];
-
-void readBD();
 void registerUser();
 void cartOperations(int userSelected, int DBIndex);
 void cartInfoScreen();
 void cartScreen();
-
-void readBD() {
-    string* Users = DataBase::Get();
-    string* userDataFields = new string[8];
-    string* userDataValue = new string[2];
-    int lineIndex = 0;
-
-    for (int i = 0; i < 20; i++) {
-        userDataFields = parseUserLineDB(Users[i], "|");
-
-        for (int i = 0; i < 8; i++) {
-            userDataValue = parseUserLineDB(userDataFields[i], ":");
-            BD[lineIndex][i][0] = userDataValue[0];
-            BD[lineIndex][i][1] = userDataValue[1];
-        }
-        lineIndex++;
-    }
-}
-
-void saveBD() {
-    string* lines = new string[20];
-
-    for (int i = 0; i < 20; i++) {
-        if (BD[i][1][1] != "") {
-            lines[i] = "id:" + to_string(i) + "|name:" + BD[i][1][1] + "|surname:" + BD[i][2][1] + "|patronymic:" + BD[i][3][1] + "|age:" + BD[i][4][1] + "|cartMoney:" + BD[i][5][1] + "|cartNumber:" + BD[i][6][1] + "|cartPin:" + BD[i][7][1] + "\n";
-        }
-    }
-
-    DataBase::Clean();
-    DataBase::AddUsers(lines);
-}
 
 void registerUser() {
     string userSurname, userName, userPatronymic, userAge, cartNumber, cartPin;
@@ -68,61 +33,45 @@ void registerUser() {
     cartNumber = to_string(1000 + rand() % 9000);
     cartPin = to_string(10 + rand() % 90);
     cout << "Ваш номер карты: " << cartNumber << "; Ваш пароль от карты: " << cartPin << "\n";
-    BD[userLastId][0][0] = "id";
-    BD[userLastId][0][1] = "";
-    BD[userLastId][1][0] = "name";
-    BD[userLastId][1][1] = userName;
-    BD[userLastId][2][0] = "surname";
-    BD[userLastId][2][1] = userSurname;
-    BD[userLastId][3][0] = "patronymic";
-    BD[userLastId][3][1] = userPatronymic;
-    BD[userLastId][4][0] = "age";
-    BD[userLastId][4][1] = userAge;
-    BD[userLastId][5][0] = "cartMoney";
-    BD[userLastId][5][1] = "0";
-    BD[userLastId][6][0] = "cartNumber";
-    BD[userLastId][6][1] = cartNumber;
-    BD[userLastId][7][0] = "cartPin";
-    BD[userLastId][7][1] = cartPin;
-    userLastId++;
-    saveBD();
+    UsersList::AddUser(userSurname, userName, userPatronymic, userAge, cartNumber, cartPin);
+    UsersList::SaveUsers();
     cartScreen();
 }
 
 void PrintBalance(int id) {
-    cout << BD[id][5][1] << " руб" << endl;
+    cout << UsersList::GetBalance(id) << " руб" << endl;
 }
 
 void WithdrawMoney(int id) {
     int withdrawal;
-    int oldMoney = stoi(BD[id][5][1]);
+    int oldMoney = stoi(UsersList::GetBalance(id));
     UI::Print("Введите сумму: ");
     cin >> withdrawal;
     if (withdrawal < oldMoney && withdrawal > 0) {
-        BD[id][5][1] = to_string(oldMoney - withdrawal);
+        UsersList::SetMoney(id, to_string(oldMoney - withdrawal));
     }
     else {
         cout << "Недостаточно средств или некорректная сумма снятия" << endl;
     }
     UI::Print("На карте: ");
-    cout << BD[id][5][1] << " руб" << endl;
-    saveBD();
+    cout << UsersList::GetBalance(id) << " руб" << endl;
+    UsersList::SaveUsers();
 }
 
 void DepositMoney(int id) {
     int deposit;
-    int oldMoney = stoi(BD[id][5][1]);
+    int oldMoney = stoi(UsersList::GetBalance(id));
     UI::Print("Введите сумму: ");
     cin >> deposit;
     if (deposit <= 0) {
         cout << "Некорректное число";
     }
     else {
-        BD[id][5][1] = to_string(oldMoney + deposit);
+        UsersList::SetMoney(id, to_string(oldMoney + deposit));
         UI::Print("На карте: ");
-        cout << BD[id][5][1] << " руб" << endl;
+        cout << UsersList::GetBalance(id) << " руб" << endl;
     }
-    saveBD();
+    UsersList::SaveUsers();
 }
 
 void cartOperations(int userSelected, int DBIndex) {
@@ -149,9 +98,14 @@ void cartOperations(int userSelected, int DBIndex) {
 }
 
 void cartInfoScreen() {
-    bool hasUser = false, userLogIn = false;
-    string uCartNumber, uCartPass, userCurrentUserIndex;
+    bool hasUser = false;
+    bool userLogIn = false;
+    string uCartNumber; 
+    string uCartPass; 
+    string userCurrentUserIndex;
     int userSelected;
+    int userId;
+
     UI::Print("Введите номер карты");
     cin >> uCartNumber;
     UI::Print("Введите пароль");
@@ -162,23 +116,13 @@ void cartInfoScreen() {
     if (userSelected == 4) {
         return cartScreen();
     }
-    for (int i = 0; i < 20; i++) {
-        if (BD[i][1][1] != "") {
-            if (BD[i][6][1] == uCartNumber) {
-                hasUser = true;
-                if (BD[i][7][1] == uCartPass) {
-                    userLogIn = true;
-                    cartOperations(userSelected, i);
-                }
-                else {
-                    break;
-                }
-            }
-        }
-    }
-    if (!hasUser) {
-        cout << "Не найден пользователь с данной картой\n";
+    userId = UsersList::GetUserId(uCartNumber, uCartPass);
+    if (userId == -1) {
+        cout << "Пользователь не найден, или введен неверный pin\n";
         cartScreen();
+    }
+    else {
+        cartOperations(userSelected, userId);
     }
 }
 
@@ -213,6 +157,6 @@ int main()
 
     cout << "Hello World!\n" << endl;
 
-    readBD();
+    UsersList::Init();
     cartScreen();
 }
