@@ -1,5 +1,9 @@
 .*
+/.vs
+/.suo
+
 Debug
+
 ### C++ ###
 # Prerequisites
 *.d
@@ -33,3 +37,5 @@ Debug
 *.exe
 *.out
 *.app
+
+
