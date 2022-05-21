@@ -140,6 +140,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bankConsoleBot.cpp" />
+    <ClCompile Include="FileDataBase.cpp" />
+    <ClCompile Include="LocalDataBase.cpp" />
+    <ClCompile Include="Parser.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FileDataBase.h" />
+    <ClInclude Include="LocalDataBase.h" />
+    <ClInclude Include="Parser.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

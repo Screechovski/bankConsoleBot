@@ -1,0 +1,10 @@
+﻿  FileDataBase.cpp
+  LocalDataBase.cpp
+  Parser.cpp
+  bankConsoleBot.cpp
+  Создание кода...
+bankConsoleBot.obj : error LNK2001: неразрешенный внешний символ "public: static class std::basic_fstream<char,struct std::char_traits<char> > FileDataBase::fs" (?fs@FileDataBase@@2V?$basic_fstream@DU?$char_traits@D@std@@@std@@A).
+bankConsoleBot.obj : error LNK2001: неразрешенный внешний символ "public: static int FileDataBase::UsersCount" (?UsersCount@FileDataBase@@2HA).
+bankConsoleBot.obj : error LNK2001: неразрешенный внешний символ "private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > (* LocalDataBase::BD)[8][2]" (?BD@LocalDataBase@@0PAY171V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@A).
+bankConsoleBot.obj : error LNK2001: неразрешенный внешний символ "public: static int LocalDataBase::UserLastId" (?UserLastId@LocalDataBase@@2HA).
+C:\Users\webde\Source\Repos\bankConsoleBot\x64\Debug\bankConsoleBot.exe : fatal error LNK1120: неразрешенных внешних элементов: 4

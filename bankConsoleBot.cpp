@@ -1,15 +1,17 @@
 ﻿#include <iostream>
 #include <string>
 #include <locale>
-#include <conio.h>
+//#include <conio.h>
 #include <Windows.h>
-#include <fstream>
+//#include <fstream>
+//#include "FileDataBase.h"
+#include "LocalDataBase.h"
 
 using namespace std;
-
+/*
 int userLastId = 0;
 fstream fs;
-string BD[20][8][2];
+string UsersData[20][8][2];
 void addUserInDB(int userID, string userName, string userSurname, string userPatronymic, string userAge, string userCartMoney, string userCartNumber, string userCartPin);
 string* parseUserLineDB(string lineDB, string delimiter);
 void printQuestionInConsole(string printedLine);
@@ -58,8 +60,8 @@ void readBD() {
 
                 for (int i = 0; i < 8; i++) {
                     userDataValue = parseUserLineDB(userDataFields[i], ":");
-                    BD[lineIndex][i][0] = userDataValue[0];
-                    BD[lineIndex][i][1] = userDataValue[1];
+                    UsersData[lineIndex][i][0] = userDataValue[0];
+                    UsersData[lineIndex][i][1] = userDataValue[1];
                 }
                 lineIndex++;
             }
@@ -78,9 +80,10 @@ void clearBD() {
 }
 
 void saveBD() {
+    cout << "test";
     for (int i = 0; i < 20; i++) {
-        if (BD[i][1][1] != "") {
-            addUserInDB(i, BD[i][1][1], BD[i][2][1], BD[i][3][1], BD[i][4][1], BD[i][5][1], BD[i][6][1], BD[i][7][1]);
+        if (UsersData[i][1][1] != "") {
+            addUserInDB(i, UsersData[i][1][1], UsersData[i][2][1], UsersData[i][3][1], UsersData[i][4][1], UsersData[i][5][1], UsersData[i][6][1], UsersData[i][7][1]);
         }
     }
 }
@@ -103,25 +106,29 @@ void registerUser() {
     cartNumber = to_string(1000 + rand() % 9000);
     cartPin = to_string(10 + rand() % 90);
     cout << "Ваш номер карты: " << cartNumber << "; Ваш пароль от карты: " << cartPin << "\n";
-    BD[userLastId][0][0] = "id";
-    BD[userLastId][0][1] = "";
-    BD[userLastId][1][0] = "name";
-    BD[userLastId][1][1] = userName;
-    BD[userLastId][2][0] = "surname";
-    BD[userLastId][2][1] = userSurname;
-    BD[userLastId][3][0] = "patronymic";
-    BD[userLastId][3][1] = userPatronymic;
-    BD[userLastId][4][0] = "age";
-    BD[userLastId][4][1] = userAge;
-    BD[userLastId][5][0] = "cartMoney";
-    BD[userLastId][5][1] = "0";
-    BD[userLastId][6][0] = "cartNumber";
-    BD[userLastId][6][1] = cartNumber;
-    BD[userLastId][7][0] = "cartPin";
-    BD[userLastId][7][1] = cartPin;
+
+    UsersData[userLastId][0][0] = "id";
+    UsersData[userLastId][0][1] = "";
+    UsersData[userLastId][1][0] = "name";
+    UsersData[userLastId][1][1] = userName;
+    UsersData[userLastId][2][0] = "surname";
+    UsersData[userLastId][2][1] = userSurname;
+    UsersData[userLastId][3][0] = "patronymic";
+    UsersData[userLastId][3][1] = userPatronymic;
+    UsersData[userLastId][4][0] = "age";
+    UsersData[userLastId][4][1] = userAge;
+    UsersData[userLastId][5][0] = "cartMoney";
+    UsersData[userLastId][5][1] = "0";
+    UsersData[userLastId][6][0] = "cartNumber";
+    UsersData[userLastId][6][1] = cartNumber;
+    UsersData[userLastId][7][0] = "cartPin";
+    UsersData[userLastId][7][1] = cartPin;
+
     userLastId++;
     clearBD();
+    //DataBase::Clean();
     saveBD();
+    //DataBase::Save();
     cartScreen();
 }
 
@@ -137,38 +144,38 @@ void cartOperations(int userSelected, int DBIndex) {
     switch (userSelected)
     {
     case 1: // карта - инфо - узнать баланс
-        cout << BD[DBIndex][5][1] << " руб" << endl;
+        cout << UsersData[DBIndex][5][1] << " руб" << endl;
         cartScreen();
         break;
     case 2: // карта - инфо - снять
         int withdrawal;
-        oldMoney = stoi(BD[DBIndex][5][1]);
+        oldMoney = stoi(UsersData[DBIndex][5][1]);
         printQuestionInConsole("Введите сумму: ");
         cin >> withdrawal;
         if (withdrawal < oldMoney && withdrawal > 0) {
-            BD[DBIndex][5][1] = to_string(oldMoney - withdrawal);
+            UsersData[DBIndex][5][1] = to_string(oldMoney - withdrawal);
         }
         else {
             cout << "Недостаточно средств или некорректная сумма поплнения" << endl;
         }
         printQuestionInConsole("На карте: ");
-        cout << BD[DBIndex][5][1] << " руб" << endl;
+        cout << UsersData[DBIndex][5][1] << " руб" << endl;
         clearBD();
         saveBD();
         cartScreen();
         break;
     case 3: // карта - инфо - внести
         int deposit;
-        oldMoney = stoi(BD[DBIndex][5][1]);
+        oldMoney = stoi(UsersData[DBIndex][5][1]);
         printQuestionInConsole("Введите сумму: ");
         cin >> deposit;
         if (deposit <= 0) {
             cout << "Некорректное число";
         }
         else {
-            BD[DBIndex][5][1] = to_string(oldMoney + deposit);
+            UsersData[DBIndex][5][1] = to_string(oldMoney + deposit);
             printQuestionInConsole("На карте: ");
-            cout << BD[DBIndex][5][1] << " руб" << endl;
+            cout << UsersData[DBIndex][5][1] << " руб" << endl;
         }
         clearBD();
         saveBD();
@@ -198,10 +205,10 @@ void cartInfoScreen() {
         return cartScreen();
     }
     for (int i = 0; i < 20; i++) {
-        if (BD[i][1][1] != "") {
-            if (BD[i][6][1] == uCartNumber) {
+        if (UsersData[i][1][1] != "") {
+            if (UsersData[i][6][1] == uCartNumber) {
                 hasUser = true;
-                if (BD[i][7][1] == uCartPass) {
+                if (UsersData[i][7][1] == uCartPass) {
                     userLogIn = true;
                     cartOperations(userSelected, i);
                 }
@@ -241,13 +248,14 @@ void cartScreen() {
         return cartScreen();
     }
 }
-
+*/
 int main()
 {
     setlocale(LC_ALL, "Russian");
 
     cout << "Hello World!\n" << endl;
 
-    readBD();
-    cartScreen();
+    //readBD();
+    LocalDataBase::Init();
+    //cartScreen();
 }
