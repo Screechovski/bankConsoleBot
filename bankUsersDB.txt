@@ -1,2 +1,1 @@
-id:0|name:asd|surname:asd|patronymic:asd|age:6734|cartMoney:0|cartNumber:1540|cartPin:22
-id:1|name:yuio|surname:jkl|patronymic:bnm|age:56|cartMoney:0|cartNumber:1559|cartPin:57
+id:0|name:asd|surname:äë¢|patronymic:asd|age:23|cartMoney:1235|cartNumber:5775|cartPin:77
