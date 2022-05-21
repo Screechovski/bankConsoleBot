@@ -4,6 +4,8 @@
 #include <conio.h>
 #include <Windows.h>
 #include <fstream>
+#include "DataBase.h"
+#include "UI.h"
 
 using namespace std;
 
@@ -12,7 +14,7 @@ fstream fs;
 string BD[20][8][2];
 void addUserInDB(int userID, string userName, string userSurname, string userPatronymic, string userAge, string userCartMoney, string userCartNumber, string userCartPin);
 string* parseUserLineDB(string lineDB, string delimiter);
-void printQuestionInConsole(string printedLine);
+
 void readBD();
 void registerUser();
 void cartInfoScreen();
@@ -45,7 +47,7 @@ string* parseUserLineDB(string lineDB, string delimiter) {
 }
 
 void readBD() {
-    string lineDB = "";
+    /*string lineDB = "";
     string* userDataFields = new string[8];
     string* userDataValue = new string[2];
     int lineIndex = 0;
@@ -66,7 +68,23 @@ void readBD() {
         }
     }
     userLastId = lineIndex;
-    fs.close();
+    fs.close();*/
+
+    string* Users = DataBase::Get();
+    string* userDataFields = new string[8];
+    string* userDataValue = new string[2];
+    int lineIndex = 0;
+
+    for (int i = 0; i < 20; i++) {
+        userDataFields = parseUserLineDB(Users[i], "|");
+
+        for (int i = 0; i < 8; i++) {
+            userDataValue = parseUserLineDB(userDataFields[i], ":");
+            BD[lineIndex][i][0] = userDataValue[0];
+            BD[lineIndex][i][1] = userDataValue[1];
+        }
+        lineIndex++;
+    }
 }
 
 void clearBD() {
@@ -87,16 +105,16 @@ void saveBD() {
 
 void registerUser() {
     string userSurname, userName, userPatronymic, userAge, cartNumber, cartPin;
-    printQuestionInConsole("Введите вашу фамилию(латиница)");
+    UI::Print("Введите вашу фамилию(латиница)");
     cin >> userSurname;
-    printQuestionInConsole("Введите вашe имя(латиница)");
+    UI::Print("Введите вашe имя(латиница)");
     cin >> userName;
-    printQuestionInConsole("Введите ваше отчество(латиница)");
+    UI::Print("Введите ваше отчество(латиница)");
     cin >> userPatronymic;
-    printQuestionInConsole("Введите ваш возраст");
+    UI::Print("Введите ваш возраст");
     cin >> userAge;
     if (stoi(userAge) < 18) {
-        printQuestionInConsole("Ваш возраст меньше 18.");
+        UI::Print("Ваш возраст меньше 18.");
         return cartScreen();
     }
     srand(time(NULL));
@@ -125,13 +143,6 @@ void registerUser() {
     cartScreen();
 }
 
-void printQuestionInConsole(string printedLine) {
-    HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(handle, FOREGROUND_GREEN);
-    cout << printedLine << endl;
-    SetConsoleTextAttribute(handle, FOREGROUND_INTENSITY);
-}
-
 void cartOperations(int userSelected, int DBIndex) {
     int oldMoney;
     switch (userSelected)
@@ -143,7 +154,7 @@ void cartOperations(int userSelected, int DBIndex) {
     case 2: // карта - инфо - снять
         int withdrawal;
         oldMoney = stoi(BD[DBIndex][5][1]);
-        printQuestionInConsole("Введите сумму: ");
+        UI::Print("Введите сумму: ");
         cin >> withdrawal;
         if (withdrawal < oldMoney && withdrawal > 0) {
             BD[DBIndex][5][1] = to_string(oldMoney - withdrawal);
@@ -151,7 +162,7 @@ void cartOperations(int userSelected, int DBIndex) {
         else {
             cout << "Недостаточно средств или некорректная сумма поплнения" << endl;
         }
-        printQuestionInConsole("На карте: ");
+        UI::Print("На карте: ");
         cout << BD[DBIndex][5][1] << " руб" << endl;
         clearBD();
         saveBD();
@@ -160,14 +171,14 @@ void cartOperations(int userSelected, int DBIndex) {
     case 3: // карта - инфо - внести
         int deposit;
         oldMoney = stoi(BD[DBIndex][5][1]);
-        printQuestionInConsole("Введите сумму: ");
+        UI::Print("Введите сумму: ");
         cin >> deposit;
         if (deposit <= 0) {
             cout << "Некорректное число";
         }
         else {
             BD[DBIndex][5][1] = to_string(oldMoney + deposit);
-            printQuestionInConsole("На карте: ");
+            UI::Print("На карте: ");
             cout << BD[DBIndex][5][1] << " руб" << endl;
         }
         clearBD();
@@ -187,11 +198,11 @@ void cartInfoScreen() {
     bool hasUser = false, userLogIn = false;
     string uCartNumber, uCartPass, userCurrentUserIndex;
     int userSelected;
-    printQuestionInConsole("Введите номер карты");
+    UI::Print("Введите номер карты");
     cin >> uCartNumber;
-    printQuestionInConsole("Введите пароль");
+    UI::Print("Введите пароль");
     cin >> uCartPass;
-    printQuestionInConsole("Выберите тип операции \n 1) Узнать баланс \n 2) Снять наличные \n 3) Внести наличные \n 4) Вернутся на главную");
+    UI::Print("Выберите тип операции \n 1) Узнать баланс \n 2) Снять наличные \n 3) Внести наличные \n 4) Вернутся на главную");
     cin >> userSelected;
 
     if (userSelected == 4) {
@@ -219,7 +230,7 @@ void cartInfoScreen() {
 
 void cartScreen() {
     int userSelected;
-    printQuestionInConsole("Выберите пункт меню \n 1) Открыть счет и карту \n 2) Операции с картой \n 3) Вернуться на главную");
+    UI::Print("Выберите пункт меню \n 1) Открыть счет и карту \n 2) Операции с картой \n 3) Вернуться на главную");
     cin >> userSelected;
     if (userSelected == 1 || userSelected == 2 || userSelected == 3) {
         switch (userSelected)

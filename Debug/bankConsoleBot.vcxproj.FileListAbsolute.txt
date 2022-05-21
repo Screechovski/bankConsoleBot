@@ -1,2 +1,0 @@
-E:\bankConsoleBot\bankConsoleBot\Debug\bankConsoleBot.exe
-E:\bankConsoleBot\bankConsoleBot\Debug\bankConsoleBot.pdb
